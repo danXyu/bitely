@@ -117,9 +117,22 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: week }));
 
 
 /**
+ * Custom validators
+ */
+app.use(expressValidator({
+ customValidators: {
+    isNotArray: function(value) {
+        return !Array.isArray(value);
+    }
+ }   
+}));
+
+
+/**
  * Main routes.
  */
 app.get('/', homeController.index);
+app.post('/', homeController.getRecipes);
 app.get('/login', userController.getLogin);
 app.post('/login', userController.postLogin);
 app.get('/logout', userController.logout);
@@ -138,6 +151,7 @@ app.post('/account/delete', passportConf.isAuthenticated, userController.postDel
 app.get('/account/unlink/:provider', passportConf.isAuthenticated, userController.getOauthUnlink);
 
 
+
 /**
  * Provided API routes.
  */
@@ -146,13 +160,6 @@ app.get('/api/tumblr', passportConf.isAuthenticated, passportConf.isAuthorized, 
 app.get('/api/facebook', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getFacebook);
 app.get('/api/twitter', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getTwitter);
 app.post('/api/twitter', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.postTwitter);
-
-
-/**
- * 
- */   
-app.get('/api/recipes', apiController.getPearson);
-app.get('/escape-velocity', homeController.escapeVelocity);
 
 
 /**

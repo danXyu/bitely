@@ -2,6 +2,11 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
 var crypto = require('crypto');
 
+
+/**
+ * Generate user schema.
+ * ::> Used as foundation for user model.
+ */
 var userSchema = new mongoose.Schema({
   email: { type: String, unique: true, lowercase: true },
   password: String,
@@ -24,11 +29,11 @@ var userSchema = new mongoose.Schema({
   resetPasswordExpires: Date
 });
 
+
 /**
  * Hash the password for security.
- * "Pre" is a Mongoose middleware that executes before each user.save() call.
+ * ::> "Pre" is a Mongoose middleware that executes before each user.save() call.
  */
-
 userSchema.pre('save', function(next) {
   var user = this;
 
@@ -48,7 +53,7 @@ userSchema.pre('save', function(next) {
 
 /**
  * Validate user's password.
- * Used by Passport-Local Strategy for password validation.
+ * ::> Used by Passport-Local Strategy for password validation.
  */
 userSchema.methods.comparePassword = function(candidatePassword, cb) {
   bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
@@ -60,7 +65,7 @@ userSchema.methods.comparePassword = function(candidatePassword, cb) {
 
 /**
  * Get URL to a user's gravatar.
- * Used in Navbar and Account Management page.
+ * ::> Used in Navbar and Account Management page.
  */
 userSchema.methods.gravatar = function(size) {
   if (!size) size = 200;

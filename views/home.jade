@@ -10,8 +10,16 @@ block content
     form(role='form', method='POST')
       input(type='hidden', name='_csrf', value=_csrf)
       .form-group
-        input.form-control(type='text', name='tweet', autofocus)
+        input.form-control(type='text', name='ingredient', autofocus)
         p.help-block YAY!
       button.btn.btn-primary(type='submit')
         i.fa.fa-twitter
         |  Tweet
+
+  .home-recipes
+    if recipes
+      table.table.table-striped
+        each recipe in recipes
+          tr
+            td= recipe.name
+            td= recipe.ingredients
